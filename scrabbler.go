@@ -4,6 +4,7 @@ import "os"
 import "fmt"
 import "bufio"
 import "strings"
+import "regexp"
 import "io/ioutil"
 import "encoding/json"
 
@@ -24,12 +25,23 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// split into words
 	var words []string
 	scanner := bufio.NewScanner(strings.NewReader(string(rawText)))
 	scanner.Split(bufio.ScanWords)
-
 	for scanner.Scan() {
 		words = append(words, scanner.Text())
+	}
+
+	// clean up our strings
+	// TODO: remove diacritical marks
+	reg, err := regexp.Compile("[^a-zA-Z]+")
+	if err != nil {
+		panic(err)
+	}
+	for ind, el := range words {
+		words[ind] = reg.ReplaceAllString(el, "")
 	}
 
 	fmt.Println(words)
