@@ -44,5 +44,23 @@ func main() {
 		words[ind] = reg.ReplaceAllString(el, "")
 	}
 
-	fmt.Println(words)
+	// remove duplicates from list
+	var wordsUnique []string
+	for _, el := range words {
+		if !isInList(el, wordsUnique) {
+			wordsUnique = append(wordsUnique, el)
+		}
+	}
+
+	fmt.Println(wordsUnique)
+}
+
+// function to test membership in a list of strings
+func isInList(thing string, book []string) bool {
+	for _, el := range book {
+		if thing == el {
+			return true
+		}
+	}
+	return false
 }
