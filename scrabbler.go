@@ -9,6 +9,7 @@ import "io/ioutil"
 import "encoding/json"
 
 const scoresFile = "scores.json"
+const lang = "en"
 
 func main() {
 	// load score data from file
@@ -47,7 +48,7 @@ func main() {
 		panic(err)
 	}
 	for ind, el := range words {
-		words[ind] = reg.ReplaceAllString(el, "")
+		words[ind] = strings.ToUpper(reg.ReplaceAllString(el, ""))
 	}
 
 	// remove duplicates from list
@@ -58,15 +59,31 @@ func main() {
 		}
 	}
 
-	// sort by score
+	// sort by score in descending order
+	wordsSorted := wordsUnique
+	for ind1, _ := range wordsUnique {
+		smallest := ind1
+		for ind2 := ind1; ind2 < len(wordsSorted); ind2++ {
+			if scrabble(wordsSorted[smallest], scoresByLang[lang]) < scrabble(wordsSorted[ind2], scoresByLang[lang]) {
+				smallest = ind2
+			}
+		}
+		if smallest != ind1 {
+			tmp := wordsSorted[ind1]
+			wordsSorted[ind1] = wordsSorted[smallest]
+			wordsSorted[smallest] = tmp
+		}
+	}
+
+	for _, word := range wordsSorted {
+		fmt.Printf("%d %s\n", scrabble(word, scoresByLang[lang]), word)
+	}
 
 	// print words with scores
 
 	// compute total scrabble score
 
 	// make game grid (?)
-
-	fmt.Println(wordsUnique)
 }
 
 // function to test membership in a list of strings
@@ -77,4 +94,13 @@ func isInList(thing string, book []string) bool {
 		}
 	}
 	return false
+}
+
+// function to add up letter scores
+func scrabble(word string, scores map[string]int) int {
+	score := 0
+	for _, letter := range word {
+		score += scores[string(letter)]
+	}
+	return score
 }
