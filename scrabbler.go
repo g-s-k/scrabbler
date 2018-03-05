@@ -19,6 +19,12 @@ func main() {
 	}
 	json.Unmarshal(rawScores, &scoresByLang)
 
+	// scan stdin - TODO: get the words from here
+	//s := bufio.NewScanner(os.Stdin)
+	//for s.Scan() {
+	//fmt.Println(s.Text())
+	//}
+
 	// load text from file
 	readFile := os.Args[1]
 	rawText, err := ioutil.ReadFile(readFile)
@@ -51,6 +57,14 @@ func main() {
 			wordsUnique = append(wordsUnique, el)
 		}
 	}
+
+	// sort by score
+
+	// print words with scores
+
+	// compute total scrabble score
+
+	// make game grid (?)
 
 	fmt.Println(wordsUnique)
 }
