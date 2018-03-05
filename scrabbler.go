@@ -75,13 +75,18 @@ func main() {
 		}
 	}
 
+	// print words with scores
+	fmt.Println("")
 	for _, word := range wordsSorted {
 		fmt.Printf("%d %s\n", scrabble(word, scoresByLang[lang]), word)
 	}
 
-	// print words with scores
-
-	// compute total scrabble score
+	// calculate total score
+	totalScore := 0
+	for _, word := range words {
+		totalScore += scrabble(word, scoresByLang[lang])
+	}
+	fmt.Printf("\nThe total SCRABBLE (tm) score of file %s is %d.\n\n", readFile, totalScore)
 
 	// make game grid (?)
 }
